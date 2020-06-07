@@ -1,3 +1,9 @@
+@mixin desktop-box {
+  width: 1200px;
+  margin: 0 auto;
+  transition: 0.3s;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,13 +16,13 @@ nav {
   // #RGBA 0-9 a-f 00 透明 ff 顯示
   background: #25252588;
   padding: 30px 0;
-  //   固定nav
+  //   位置 固定
   position: fixed;
   width: 100%;
 
   div {
-    width: 1200px;
-    margin: 0 auto;
+    @include desktop-box();
+    // padding: 0 0 0 800px;
 
     a {
       color: white;
@@ -37,23 +43,29 @@ nav {
   width: 100%;
   height: 100vh;
   background-image: url(./img/banner.jpg);
+  // 背景位置 置中
   background-position: center;
+  // 背景大小 填滿
   background-size: cover;
 }
 
 // 圖片區域
 #picture {
-  width: 1200px;
-  margin: 0 auto;
+  @include desktop-box();
+
+  // 顯示用格線
   display: grid;
+  // 平均分配成三個欄位
   grid-template-columns: repeat(3, 1fr);
   color: white;
 
   div {
     height: 260px;
 
+    // div裡的第一個元素
     &:nth-child(1) {
-      background: #252525;
+      background:deepskyblue;
+      font-weight: 900;
       font-size: 42px;
       display: grid;
       // 垂直置中
@@ -62,14 +74,130 @@ nav {
       text-align: center;
     }
 
+    // div裡的第二個元素
     &:nth-child(2) {
       background-image: url(./img/d-beach-1.jpg);
       background-size: 100%;
     }
 
+    // div裡的第三個元素
     &:nth-child(3) {
       background-image: url(./img/d-beach-2.jpg);
       background-size: 100%;
+    }
+  }
+}
+
+// 內容區域
+
+#content {
+  @include desktop-box();
+
+  // 顯示用格線
+  display: grid;
+  // 平均分成兩個欄位
+  grid-template-columns: repeat(2, 1fr);
+  // 欄位間距
+  grid-gap: 50px;
+
+  h1 {
+    // h1 從 grid 1 到 grid 3  跨欄
+    grid-column: 1 / 3;
+    padding: 30px 0;
+  }
+
+  p {
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+}
+
+
+// RWD
+
+// 平板 : 大於等於 768 並且 小於等於 1199
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+
+  @mixin table-box {
+    width: 750px;
+    margin: 0 auto;
+    transition: 0.3s;
+  }
+
+  nav {
+    div {
+      @include table-box();
+    }
+  }
+
+  #picture {
+    @include table-box();
+    grid-template-columns: repeat(2, 1fr);
+
+    div {
+      height: 300px;
+    }
+    div:nth-child(1) {
+      grid-column: 1 / 3;
+    }
+    div:nth-child(2) {
+      background-image: url(./img/p-beach-1.jpg);
+    }
+    div:nth-child(3) {
+      background-image: url(./img/p-beach-2.jpg);
+    }
+  }
+
+  #content {
+    @include table-box();
+  }
+}
+
+
+// 手機 : 小於於等於 767
+@media screen and (max-width: 767px) {
+
+  @mixin mobile-box {
+    // 寬度自動適應不同手機
+    width: 100%;
+    transition: 0.3s;
+    padding: 0 15px;
+  }
+
+  nav {
+    div {
+      @include mobile-box();
+    }
+  }
+
+  #picture {
+    @include mobile-box();
+    // 一個欄位
+    grid-template-columns: 1fr;
+
+    div {
+      height: 650px;
+
+      &:nth-child(2) {
+        background-image: url(./img/m-beach-1.png);
+        background-size: cover;
+      }
+
+      &:nth-child(3) {
+        background-image: url(./img/m-beach-2.png);
+        background-size: cover;
+      }
+    }
+  }
+
+  #content {
+    @include mobile-box();
+    // 一個欄位
+    grid-template-columns: 1fr;
+
+    h1 {
+      // 因前面設定 1 / 3 這邊要改成 1 / 2
+      grid-column: 1 / 2;
     }
   }
 }
